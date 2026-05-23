@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && mkdir -p dist/styles && cp src/styles/index.css dist/styles/",
     "dev": "tsc --watch"
   },
   "peerDependencies": {
