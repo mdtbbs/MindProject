@@ -24,8 +24,10 @@
     }
   },
   "scripts": {
-    "build": "tsc && mkdir -p dist/styles && cp src/styles/index.css dist/styles/",
-    "dev": "tsc --watch"
+    "build": "tsc && npm run pre-render",
+    "build:copy": "tsc && node -e \"const fs=require('fs');const path=require('path');fs.mkdirSync(path.join('dist','styles'),{recursive:true});fs.copyFileSync(path.join('src','styles','index.css'),path.join('dist','styles','index.css'));\"",
+    "dev": "tsc --watch",
+    "pre-render": "node scripts/pre-render.js"
   },
   "peerDependencies": {
     "react": "^18.0.0",
