@@ -1,10 +1,12 @@
+export type UserRole = 'guest' | 'user' | 'moderator' | 'admin';
+
 export interface User {
   id: number;
-  username: string;
-  email: string;
-  role: 'user' | 'moderator' | 'admin';
-  avatar_url?: string;
-  bio?: string;
-  mindauth_id?: string;
+  username: string | null;
+  email: string | null;
+  role: UserRole;
+  avatar_url?: string | null;
+  bio?: string | null;
+  mindauth_id?: number;
   created_at?: string;
 }
