@@ -7,6 +7,38 @@ export interface User {
     avatar_url?: string | null;
     bio?: string | null;
     mindauth_id?: number;
+    email_verified?: boolean;
     created_at?: string;
+    updated_at?: string;
+}
+export interface UserQuota {
+    user_id: number;
+    max_servers: number;
+    total_cpu_limit: number;
+    total_memory_limit: number;
+    total_bandwidth_limit: number;
+    role: UserRole;
+}
+export interface UserProfile extends User {
+    post_count?: number;
+    reply_count?: number;
+    bookmark_count?: number;
+    medals?: UserMedal[];
+    titles?: UserTitle[];
+}
+export interface UserMedal {
+    id: number;
+    name: string;
+    description?: string;
+    icon_url?: string;
+    rarity: 'common' | 'rare' | 'epic' | 'legendary';
+    earned_at: string;
+}
+export interface UserTitle {
+    id: number;
+    name: string;
+    color?: string;
+    icon?: string;
+    is_special: boolean;
 }
 //# sourceMappingURL=user.d.ts.map

@@ -1,5 +1,12 @@
+'use client';
+
 // @mindproject/shared - Unified components, hooks, and types
-// Exports will be added as components are implemented
+
+// Type exports
 export * from './types';
-export * from './hooks';
+
+// Component exports
 export * from './components';
+
+// Hook exports
+export * from './hooks';

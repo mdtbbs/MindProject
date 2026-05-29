@@ -1,4 +1,5 @@
 "use strict";
+'use client';
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
@@ -15,7 +16,9 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // @mindproject/shared - Unified components, hooks, and types
-// Exports will be added as components are implemented
+// Type exports
 __exportStar(require("./types"), exports);
-__exportStar(require("./hooks"), exports);
+// Component exports
 __exportStar(require("./components"), exports);
+// Hook exports
+__exportStar(require("./hooks"), exports);
