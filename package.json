@@ -19,9 +19,17 @@
     "dev:manager-api": "npm run dev --workspace=EasyManager/backend",
     "dev:manager-ui": "npm run dev --workspace=EasyManager/frontend",
     "test": "npm run test --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present"
+    "lint": "npm run lint --workspaces --if-present",
+    "docs:check": "node scripts/doc-sync/sync.js detect",
+    "docs:confirm": "node scripts/doc-sync/sync.js confirm",
+    "docs:apply": "node scripts/doc-sync/sync.js apply",
+    "docs:skip": "node scripts/doc-sync/sync.js skip",
+    "docs:status": "node scripts/doc-sync/sync.js status",
+    "docs:init": "node scripts/doc-sync/sync.js init",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.0.0",
     "typescript": "^5.0.0"
   },
   "engines": {

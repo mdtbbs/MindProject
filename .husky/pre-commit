@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 可选: 运行测试
+# npm test
+
+# doc-sync: 检测文档变更（静默模式）
+node scripts/doc-sync/sync.js detect 2>/dev/null

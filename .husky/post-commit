@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# doc-sync: 提交后提示确认文档更新
+echo ""
+echo "📝 doc-sync: 检查是否有待确认的文档更新..."
+
+# 检查是否有待确认的更新
+if [ -f ".doc-sync/pending-updates.json" ]; then
+  # 检查是否有 suggestions
+  has_updates=$(node -e "const p=require('./.doc-sync/pending-updates.json'); console.log(p.suggestions && p.suggestions.length > 0 ? 'yes' : 'no')" 2>/dev/null || echo "no")
+
+  if [ "$has_updates" = "yes" ]; then
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "检测到代码变更可能需要更新文档。"
+    echo ""
+    echo "运行以下命令来处理文档更新:"
+    echo ""
+    echo "  npx doc-sync confirm  - 查看并确认 AI 生成的更新建议"
+    echo "  npx doc-sync apply    - 应用文档更新"
+    echo "  npx doc-sync skip     - 跳过本次更新"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+  fi
+fi

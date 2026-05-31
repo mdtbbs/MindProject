@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# doc-sync: 检测暂存区变更并生成文档更新建议
+echo "📝 doc-sync: 检测文档变更..."
+
+# 运行 doc-sync detect
+node scripts/doc-sync/sync.js detect
+
+# 如果有待确认的更新，显示提示
+if [ -f ".doc-sync/pending-updates.json" ]; then
+  echo ""
+  echo "提示: 提交后运行 'npx doc-sync confirm' 来确认文档更新"
+  echo ""
+fi
