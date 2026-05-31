@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # doc-sync: 提交后提示确认文档更新
 echo ""
 echo "📝 doc-sync: 检查是否有待确认的文档更新..."

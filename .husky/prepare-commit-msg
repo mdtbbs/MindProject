@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # doc-sync: 检测暂存区变更并生成文档更新建议
 echo "📝 doc-sync: 检测文档变更..."
 
