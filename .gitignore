@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Test output
+test-results/
+playwright-report/
+
+# Tool artifacts
+.doc-sync/
+.superpowers/
+.claude/scheduled_tasks.lock
+
+# Build output (shared package)
+shared/dist/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
