@@ -1,0 +1,14 @@
+[submodule "EasyManager"]
+	path = EasyManager
+	url = https://github.com/mdtbbs/EasyManager.git
+	branch = master
+
+[submodule "MindAuth"]
+	path = MindAuth
+	url = https://github.com/mdtbbs/MindAuth.git
+	branch = main
+
+[submodule "MindFourm"]
+	path = MindFourm
+	url = https://github.com/mdtbbs/MindFourm.git
+	branch = master

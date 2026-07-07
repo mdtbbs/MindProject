@@ -10,6 +10,10 @@ playwright-report/
 .superpowers/
 .claude/scheduled_tasks.lock
 
+# Deploy/Dev temp
+.deploy-tmp/
+.dev-logs/
+
 # Build output (shared package)
 shared/dist/
 

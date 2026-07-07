@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 
@@ -7,6 +9,13 @@ export interface SidebarItem {
   icon?: React.ReactNode;
   href?: string;
   onClick?: () => void;
+  /** 允许访问的角色列表，不传则所有角色可见 */
+  roles?: string[];
+}
+
+export interface SidebarGroup {
+  label: string;
+  items: SidebarItem[];
 }
 
 export interface AdminSidebarProps {
@@ -14,8 +23,10 @@ export interface AdminSidebarProps {
   serviceName: string;
   /** 副标题 */
   subtitle?: string;
-  /** 菜单项列表 */
-  items: SidebarItem[];
+  /** 菜单项列表（平铺模式，与 groups 二选一） */
+  items?: SidebarItem[];
+  /** 分组菜单（分组模式，与 items 二选一，优先使用 groups） */
+  groups?: SidebarGroup[];
   /** 当前选中的 key */
   activeKey?: string;
   /** 是否折叠模式 */
@@ -32,6 +43,7 @@ export function AdminSidebar({
   serviceName,
   subtitle,
   items,
+  groups,
   activeKey,
   collapsed = false,
   logoUrl,
@@ -46,6 +58,56 @@ export function AdminSidebar({
     } else if (onItemClick) {
       onItemClick(item.key);
     }
+  };
+
+  const renderItem = (item: SidebarItem) => {
+    const isActive = item.key === activeKey;
+    const baseStyle: React.CSSProperties = {
+      display: 'flex',
+      alignItems: 'center',
+      gap: collapsed ? 0 : 8,
+      padding: collapsed ? 8 : '8px 12px',
+      fontSize: collapsed ? 18 : 13,
+      borderRadius: 6,
+      marginBottom: 4,
+      cursor: 'pointer',
+      transition: 'all 0.15s ease',
+      justifyContent: collapsed ? 'center' : 'flex-start',
+      background: isActive ? 'var(--bg-elevated)' : 'transparent',
+      color: isActive ? 'var(--text)' : 'var(--text-secondary)',
+      textDecoration: 'none',
+    };
+
+    const content = (
+      <>
+        {item.icon}
+        {!collapsed && <span>{item.label}</span>}
+      </>
+    );
+
+    if (item.href) {
+      return (
+        <Link
+          key={item.key}
+          href={item.href}
+          style={baseStyle}
+          className={isActive ? 'admin-sidebar-item active' : 'admin-sidebar-item'}
+        >
+          {content}
+        </Link>
+      );
+    }
+
+    return (
+      <div
+        key={item.key}
+        onClick={() => handleItemClick(item)}
+        style={baseStyle}
+        className={isActive ? 'admin-sidebar-item active' : 'admin-sidebar-item'}
+      >
+        {content}
+      </div>
+    );
   };
 
   return (
@@ -109,55 +171,16 @@ export function AdminSidebar({
 
       {/* Menu Items */}
       <nav>
-        {items.map((item) => {
-          const isActive = item.key === activeKey;
-          const baseStyle: React.CSSProperties = {
-            display: 'flex',
-            alignItems: 'center',
-            gap: collapsed ? 0 : 8,
-            padding: collapsed ? 8 : '8px 12px',
-            fontSize: collapsed ? 18 : 13,
-            borderRadius: 6,
-            marginBottom: 4,
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-            justifyContent: collapsed ? 'center' : 'flex-start',
-            background: isActive ? 'var(--bg-elevated)' : 'transparent',
-            color: isActive ? 'var(--text)' : 'var(--text-secondary)',
-            textDecoration: 'none',
-          };
-
-          const content = (
-            <>
-              {item.icon}
-              {!collapsed && <span>{item.label}</span>}
-            </>
-          );
-
-          if (item.href) {
-            return (
-              <Link
-                key={item.key}
-                href={item.href}
-                style={baseStyle}
-                className={isActive ? 'admin-sidebar-item active' : 'admin-sidebar-item'}
-              >
-                {content}
-              </Link>
-            );
-          }
-
-          return (
-            <div
-              key={item.key}
-              onClick={() => handleItemClick(item)}
-              style={baseStyle}
-              className={isActive ? 'admin-sidebar-item active' : 'admin-sidebar-item'}
-            >
-              {content}
-            </div>
-          );
-        })}
+        {(groups ?? []).length > 0
+          ? (groups ?? []).map((group) => (
+              <div key={group.label} className="admin-sidebar-group">
+                {!collapsed && (
+                  <div className="admin-sidebar-group-label">{group.label}</div>
+                )}
+                {group.items.map((item) => renderItem(item))}
+              </div>
+            ))
+          : (items ?? []).map((item) => renderItem(item))}
       </nav>
 
       {/* Footer */}

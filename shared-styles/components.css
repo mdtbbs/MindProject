@@ -414,6 +414,21 @@
   color: var(--text);
 }
 
+.admin-sidebar-group {
+  margin-bottom: 0.75rem;
+}
+
+.admin-sidebar-group-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  margin-bottom: 0.25rem;
+  user-select: none;
+}
+
 /* ===== 管理后台主内容 ===== */
 .admin-content {
   margin-left: var(--sidebar-width);
@@ -845,6 +860,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 1rem;
+  overflow: hidden;
 }
 
 .sidebar-title {
@@ -866,6 +882,9 @@
   font-size: 0.875rem;
   transition: all 0.15s ease;
   color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .sidebar-link:hover {
@@ -887,6 +906,15 @@
   font-size: 0.875rem;
   border-radius: 9999px;
   transition: all 0.15s ease;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.sidebar-tag span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
 }
 
 .sidebar-tag:hover {
@@ -960,4 +988,116 @@
   .stats-grid-3 {
     grid-template-columns: repeat(2, 1fr);
   }
+}
+
+/* ===== 深色模式全局覆盖 ===== */
+[data-theme="dark"] .bg-white,
+.dark .bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+[data-theme="dark"] .bg-surface-50,
+.dark .bg-surface-50 {
+  background-color: var(--bg-elevated) !important;
+}
+
+[data-theme="dark"] .bg-surface-100,
+.dark .bg-surface-100 {
+  background-color: var(--bg-hover) !important;
+}
+
+[data-theme="dark"] .text-surface-900,
+.dark .text-surface-900 {
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .text-surface-700,
+.dark .text-surface-700 {
+  color: var(--text) !important;
+}
+
+[data-theme="dark"] .text-surface-600,
+.dark .text-surface-600 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-surface-500,
+.dark .text-surface-500 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .text-surface-400,
+.dark .text-surface-400 {
+  color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .border-surface-200,
+.dark .border-surface-200 {
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .border-surface-100,
+.dark .border-surface-100 {
+  border-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] .divide-surface-200,
+.dark .divide-surface-200 {
+  border-color: var(--border) !important;
+}
+
+[data-theme="dark"] .divide-surface-100,
+.dark .divide-surface-100 {
+  border-color: var(--border-light) !important;
+}
+
+[data-theme="dark"] .hover:bg-surface-50,
+.dark .hover:bg-surface-50 {
+  background-color: var(--bg-hover) !important;
+}
+
+[data-theme="dark"] .hover:bg-surface-100,
+.dark .hover:bg-surface-100 {
+  background-color: var(--bg-elevated) !important;
+}
+
+/* Clean blue override */
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-danger,
+.input,
+.card,
+.toast,
+.theme-toggle,
+.server-card,
+.server-card-full,
+.login-split .login-brand,
+.login-split .login-form {
+  border-radius: 0 !important;
+}
+
+.input:focus {
+  box-shadow: 0 0 0 3px rgba(47,128,237,0.15) !important;
+}
+
+.card:hover,
+.server-card:hover,
+.server-card-full:hover {
+  border-color: rgba(47,128,237,0.22) !important;
+  box-shadow: 0 4px 12px rgba(47,128,237,0.08) !important;
+}
+
+.btn-primary {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark) !important;
+}
+
+.theme-toggle:hover {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
 }

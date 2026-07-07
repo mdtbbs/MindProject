@@ -83,7 +83,7 @@ npm run docs:status   # Check pending updates
 | Component | Description |
 |-----------|-------------|
 | `UnifiedHeader` | Navigation header with search, notifications, theme toggle |
-| `AdminSidebar` | Admin panel sidebar with collapse mode |
+| `AdminSidebar` | Admin panel sidebar with collapse mode and groups support |
 | `LoginLayout` | Split login layout with brand animation |
 | `UserCard` | User profile card with medal/title display |
 | `ServerCard` | Server info card with status/players/latency |
@@ -207,7 +207,7 @@ REDIS_HOST=localhost
 
 | Layer | Technology |
 |-------|------------|
-| **Backend** | Express.js (MindAuth), Koa (MindFourm/EasyManager) |
+| **Backend** | Express.js (MindAuth), NestJS (MindFourm), Koa (EasyManager) |
 | **Database** | MySQL 8 + Redis 7 |
 | **Frontend** | Next.js 14 (App Router), React 18, TypeScript |
 | **Styling** | Tailwind CSS + shared-styles CSS variables |
@@ -233,4 +233,4 @@ REDIS_HOST=localhost
 - [EasyManager Details](EasyManager/CLAUDE.md)
 
 ---
-*Last updated: 2026-05-31*
+*Last updated: 2026-07-05*

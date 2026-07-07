@@ -1,4 +1,8 @@
+'use client';
+
 import React from 'react';
+import { motion, type Easing } from 'framer-motion';
+import { cn } from '../lib/utils';
 
 export type MedalLevel = 1 | 2 | 3 | 4;
 
@@ -31,7 +35,7 @@ const sizeMap = {
   xs: { width: 14, height: 14, fontSize: 8 },
 };
 
-const levelStyles: Record<MedalLevel, { bg: string; color: string; shadow?: string }> = {
+const levelStyles: Record<MedalLevel, { bg: string; color: string; glow?: string }> = {
   1: {
     bg: 'var(--badge-lv1)',
     color: '#666',
@@ -43,13 +47,16 @@ const levelStyles: Record<MedalLevel, { bg: string; color: string; shadow?: stri
   3: {
     bg: 'linear-gradient(135deg, var(--badge-lv3-start), var(--badge-lv3-end))',
     color: '#fff',
+    glow: '0 0 10px rgba(255,193,7,0.5)',
   },
   4: {
     bg: 'linear-gradient(135deg, var(--badge-lv4-start), var(--badge-lv4-end))',
     color: '#fff',
-    shadow: '0 2px 8px rgba(255,107,53,0.3)',
+    glow: '0 0 15px rgba(255,107,53,0.6)',
   },
 };
+
+const easeInOut: Easing = 'easeInOut';
 
 export function Medal({
   level,
@@ -66,14 +73,27 @@ export function Medal({
   const { width, height, fontSize } = sizeMap[size];
   const style = levelStyles[level];
 
+  // 动画变体
+  const pulseAnimation = {
+    scale: [1, 1.05, 1],
+    boxShadow: level >= 3
+      ? ['0 0 10px rgba(255,107,53,0.4)', '0 0 20px rgba(255,107,53,0.6)', '0 0 10px rgba(255,107,53,0.4)']
+      : undefined,
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: easeInOut,
+    },
+  };
+
   return (
     <div
       className="medal-container"
       style={{ position: 'relative', display: 'inline-block' }}
       onClick={onClick}
     >
-      <div
-        className={`medal medal-lv${level}`}
+      <motion.div
+        className={cn(`medal medal-lv${level}`, onClick && 'cursor-pointer')}
         style={{
           width,
           height,
@@ -84,12 +104,14 @@ export function Medal({
           fontSize,
           background: customColor || style.bg,
           color: style.color,
-          boxShadow: style.shadow,
-          cursor: onClick ? 'pointer' : 'default',
+          boxShadow: style.glow,
         }}
+        animate={level >= 3 ? pulseAnimation : undefined}
+        whileHover={{ scale: 1.1 }}
+        whileTap={onClick ? { scale: 0.95 } : undefined}
       >
         {icon}
-      </div>
+      </motion.div>
 
       {showTooltip && name && (
         <div

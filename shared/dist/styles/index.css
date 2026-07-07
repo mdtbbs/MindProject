@@ -1,6 +1,0 @@
-/* @mindproject/shared/styles - Unified CSS imports */
-/* This file imports from the root shared-styles directory */
-
-@import '../../shared-styles/variables.css';
-@import '../../shared-styles/components.css';
-@import '../../shared-styles/utilities.css';
