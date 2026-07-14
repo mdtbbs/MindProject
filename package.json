@@ -7,8 +7,6 @@
     "MindAuth",
     "MindFourm",
     "MindFourm/frontend",
-    "EasyManager/backend",
-    "EasyManager/frontend",
     "shared"
   ],
   "scripts": {
@@ -16,8 +14,6 @@
     "dev:auth": "npm run dev --workspace=MindAuth",
     "dev:forum-api": "npm run dev --workspace=MindFourm",
     "dev:forum-ui": "npm run dev --workspace=MindFourm/frontend",
-    "dev:manager-api": "npm run dev --workspace=EasyManager/backend",
-    "dev:manager-ui": "npm run dev --workspace=EasyManager/frontend",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "docs:check": "node scripts/doc-sync/sync.js detect",

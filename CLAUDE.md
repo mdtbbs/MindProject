@@ -4,13 +4,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-MindProject is a monorepo containing a Mindustry community platform with three integrated services:
+MindProject is a monorepo containing a Mindustry community platform with four integrated services:
 
-| Service | Port | Description |
-|---------|------|-------------|
-| **MindAuth** | 4001 | OAuth 2.0 SSO authentication service |
-| **MindFourm** | 4000 (API) / 3000 (Frontend) | Forum system |
-| **EasyManager** | 5001 (API) / 5002 (WS) / 3001 (Frontend) | Mindustry server hosting manager |
+| Service | Port | Description | Status |
+|---------|------|-------------|--------|
+| **MindAuth** | 4001 | OAuth 2.0 SSO authentication service | ✅ Active |
+| **MindFourm** | 4000 (API) / 3000 (Frontend) | Forum system | ✅ Active |
+| **EasyManager** | 5001 (API) / 5002 (WS) / 3001 (Frontend) | Mindustry server hosting manager | ⏸ Paused (code preserved) |
+| **MindFileList** | 3000 | File hosting & download service (external repo: `download-site`) | ✅ Active |
+
+> **Note:** EasyManager is currently paused. Its code is preserved in `EasyManager/` but is not started or deployed. MindFourm's server features are disabled by default via `feature_servers_enabled` setting and `EASYMANAGER_ENABLED=false` backend config. See [Restoring EasyManager](#restoring-easymanager) at the bottom.
 
 ## Architecture
 
@@ -22,13 +25,12 @@ MindProject is a monorepo containing a Mindustry community platform with three i
          ▼                    ▼                    ▼                    ▼
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │  MindFourm  │     │   MindAuth  │     │ EasyManager │     │   Shared    │
-│  (Forum)    │────▶│  (OAuth)    │────▶│  (Servers)  │     │ (Components)│
-│  Port 3000  │     │  Port 4001  │     │  Port 3001  │     │  Port N/A   │
-│  Port 4000  │     │             │     │  Port 5001  │     │             │
-└─────────────┘     └─────────────┘     │  Port 5002  │     └─────────────┘
-        │                   │           └─────────────┘            │
-        │                   │                    │                 │
-        └───────────────────┴────────────────────┘                 │
+│  (Forum)    │────▶│  (OAuth)    │     │  (Paused)   │     │ (Components)│
+│  Port 3000  │     │  Port 4001  │     │  Preserved  │     │  Port N/A   │
+│  Port 4000  │     │             │     │  Code Only  │     │             │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+        │                   │                                     │
+        └───────────────────┘                                     │
                              │                                     │
                     ┌────────┴────────┐                           │
                     │  shared-styles  │◀──────────────────────────┘
@@ -37,10 +39,9 @@ MindProject is a monorepo containing a Mindustry community platform with three i
 ```
 
 ### Integration Flow
-1. All services use MindAuth for OAuth SSO login
-2. MindFourm displays EasyManager server listings via `/api/forum/*` proxy routes
-3. Users can apply for servers through MindFourm, managed by EasyManager
-4. EasyManager notifies MindFourm when servers are approved (auto-post callback)
+1. MindFourm uses MindAuth for OAuth SSO login
+2. MindFourm uploads resource files to MindFileList; MFL manages file storage and enforces download restrictions based on moderation status
+3. EasyManager server listings/applications/callbacks are ⏸ paused; related code is preserved and disabled by default (`EASYMANAGER_ENABLED=false`, `feature_servers_enabled=false`)
 
 ## Commands
 
@@ -53,9 +54,12 @@ cd MindAuth && npm run dev        # Port 4001
 cd MindFourm && npm run dev       # Port 4000 (API)
 cd MindFourm/frontend && npm run dev  # Port 3000 (Frontend)
 
-# EasyManager (Server Manager)
-cd EasyManager/backend && npm run dev  # Port 5001 (API)
-cd EasyManager/frontend && npm run dev # Port 3001 (Frontend)
+# EasyManager (Server Manager) — ⏸ PAUSED
+# cd EasyManager/backend && npm run dev  # Port 5001 (API)
+# cd EasyManager/frontend && npm run dev # Port 3001 (Frontend)
+
+# MindFileList (File Hosting)
+cd ../download-site && node src/app.js  # Port 3000
 
 # Shared package build
 cd shared && npm run build        # Build TypeScript to dist/
@@ -158,18 +162,32 @@ Third-party → /authorize?client_id=... → Login → Redirect with code → /t
 
 Token verification: `POST /api/verify` with `{ session_token }`
 
-### MindFourm ↔ EasyManager Integration
+### MindFourm ↔ EasyManager Integration — ⏸ Paused
 
-**MindFourm calls EasyManager** (`X-Service-Key` header):
-| Endpoint | Purpose |
-|----------|---------|
-| `GET /api/forum/servers/public` | Public server list |
-| `GET /api/forum/user/:id/servers` | User's servers |
-| `POST /api/forum/apply` | Apply for new server |
-| `GET /api/forum/servers/:id/basic` | Basic server info |
+EasyManager integration is preserved but disabled by default. MindFourm backend uses `EASYMANAGER_ENABLED=false`; frontend server UI is hidden by `feature_servers_enabled=false`.
 
-**EasyManager callback to MindFourm**:
-- `POST /api/auto-post/server-approved` - Auto-create announcement post when server approved
+When disabled, MindFourm does not connect to EasyManager:
+| Forum Endpoint | Disabled behavior |
+|----------|-------------------|
+| `GET /api/servers/public` | Returns an empty server list |
+| `GET /api/servers/versions` | Returns an empty version list |
+| `GET /api/servers/templates` | Returns an empty template list |
+| `POST /api/servers/apply` | Returns a server feature disabled error |
+
+Preserved callback endpoint:
+- `POST /api/auto-post/server-approved` - Auto-create announcement post when EasyManager is restored and server approval callback is enabled
+
+### MindFourm ↔ MindFileList Integration
+
+MindFourm uploads resource files to MindFileList (MFL) via API. MFL stores files and serves downloads; MindFourm manages resource metadata and moderation.
+
+| MFL Endpoint | Called By | Purpose |
+|-------------|-----------|---------|
+| `POST /api/v1/files/upload` | MindFourm | Upload file with `approval_status=pending` |
+| `PUT /api/v1/files/:id/approval` | MindFourm | Sync moderation status (approved/rejected) |
+| `GET /download/:id` | Users (via redirect) | File download — blocked if pending/rejected |
+
+Download restriction: MFL checks `approval_status` on each download request and returns 403 with a styled error page if the file is pending or rejected.
 
 ## Environment Setup
 
@@ -190,11 +208,13 @@ FRONTEND_URL=http://localhost:3000
 MINDAUTH_URL=http://localhost:4001
 MINDAUTH_CLIENT_ID=forum
 MINDAUTH_CLIENT_SECRET=<secret>
+# EasyManager — 暂停中，默认关闭
+EASYMANAGER_ENABLED=false
 EASYMANAGER_URL=http://localhost:5001
 EASYMANAGER_API_KEY=<key>
 ```
 
-### EasyManager (`EasyManager/backend/.env`)
+### EasyManager (`EasyManager/backend/.env`) — ⏸ PAUSED
 ```bash
 PORT=5001
 WS_PORT=5002
@@ -207,7 +227,7 @@ REDIS_HOST=localhost
 
 | Layer | Technology |
 |-------|------------|
-| **Backend** | Express.js (MindAuth), NestJS (MindFourm), Koa (EasyManager) |
+| **Backend** | Express.js (MindAuth, MindFileList), NestJS (MindFourm), Koa (EasyManager) |
 | **Database** | MySQL 8 + Redis 7 |
 | **Frontend** | Next.js 14 (App Router), React 18, TypeScript |
 | **Styling** | Tailwind CSS + shared-styles CSS variables |
@@ -230,7 +250,22 @@ REDIS_HOST=localhost
 
 - [MindAuth Details](MindAuth/CLAUDE.md)
 - [MindFourm Details](MindFourm/CLAUDE.md)
-- [EasyManager Details](EasyManager/CLAUDE.md)
+- [EasyManager Details](EasyManager/CLAUDE.md) ⏸ *(paused)*
+
+## Restoring EasyManager
+
+EasyManager is currently paused. All code is preserved in `EasyManager/`. To restore:
+
+1. **MindAuth** — Uncomment the EasyManager OAuth client in `MindAuth/src/db/schema-mysql.js`
+2. **MindFourm backend** — Set `EASYMANAGER_ENABLED=true` in `MindFourm/.env`
+3. **MindFourm frontend** — Set `feature_servers_enabled` to `true` in admin settings (站点设置 → 功能管理)
+4. **Root configs** — Uncomment EasyManager entries in:
+   - `package.json` (workspaces + scripts)
+   - `ecosystem.config.js` (PM2 apps)
+   - `deploy.sh` (build steps)
+   - `start-mindproject.ps1` / `stop-mindproject.ps1` (tmux panes)
+   - `scripts/doc-sync/sync.js` (doc mapping)
+5. **Start EasyManager** — `cd EasyManager/backend && npm install && npm run dev`
 
 ---
-*Last updated: 2026-07-05*
+*Last updated: 2026-07-13*

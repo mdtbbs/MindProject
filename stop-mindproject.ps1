@@ -16,11 +16,9 @@ if (-not $session) {
 Write-Host "正在停止所有服务..."
 
 # 发送 Ctrl+C 到所有面板
-rmux send-keys -t mindproject:mindauth.0 C-c
-rmux send-keys -t mindproject:mindforum.0 C-c
-rmux send-keys -t mindproject:easymanager.1 C-c
-rmux send-keys -t mindproject:easymanager.2 C-c
-rmux send-keys -t mindproject:shared.0 C-c
+rmux send-keys -t mindproject:overview.0 C-c
+rmux send-keys -t mindproject:overview.1 C-c
+rmux send-keys -t mindproject:overview.2 C-c
 
 Start-Sleep -Seconds 1
 

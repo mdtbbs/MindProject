@@ -40,7 +40,8 @@ const DEFAULT_CONFIG = {
   docFiles: {
     'MindAuth/CLAUDE.md': { service: 'MindAuth', patterns: ['MindAuth/**'] },
     'MindFourm/CLAUDE.md': { service: 'MindFourm', patterns: ['MindFourm/**'] },
-    'EasyManager/CLAUDE.md': { service: 'EasyManager', patterns: ['EasyManager/**'] },
+    // EasyManager 暂停中，保留映射以便恢复
+    // 'EasyManager/CLAUDE.md': { service: 'EasyManager', patterns: ['EasyManager/**'] },
     'CLAUDE.md': { service: 'root', patterns: ['shared/**', 'shared-styles/**'] },
     'README.md': { service: 'root', patterns: ['*'] }
   },

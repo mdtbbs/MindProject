@@ -64,16 +64,16 @@ cd "$PROJECT_DIR/MindFourm/frontend"
 npm ci
 npm run build
 
-# ─── EasyManager Backend ─────────────────────────────────
-info "EasyManager API: installing dependencies..."
-cd "$PROJECT_DIR/EasyManager/backend"
-npm ci --production
-
-# ─── EasyManager Frontend ────────────────────────────────
-info "EasyManager Frontend: installing dependencies & building..."
-cd "$PROJECT_DIR/EasyManager/frontend"
-npm ci
-npm run build
+# ─── EasyManager (暂停中) ─────────────────────────────────
+# EasyManager 已暂停开发，如需恢复取消以下注释
+# info "EasyManager API: installing dependencies..."
+# cd "$PROJECT_DIR/EasyManager/backend"
+# npm ci --production
+#
+# info "EasyManager Frontend: installing dependencies & building..."
+# cd "$PROJECT_DIR/EasyManager/frontend"
+# npm ci
+# npm run build
 
 # ─── Restart services ────────────────────────────────────
 info "Reloading PM2 services..."
