@@ -5,10 +5,10 @@
 
 [submodule "MindAuth"]
 	path = MindAuth
-	url = https://github.com/mdtbbs/MindAuth.git
+	url = https://cnb.cool/huisway/MindAuth.git
 	branch = main
 
 [submodule "MindFourm"]
 	path = MindFourm
-	url = https://github.com/mdtbbs/MindFourm.git
+	url = https://cnb.cool/huisway/MindFourm.git
 	branch = master
