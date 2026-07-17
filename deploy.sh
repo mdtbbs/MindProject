@@ -41,11 +41,11 @@ info "=== MindProject Deploy Start ($TIMESTAMP) ==="
 # Pull latest code
 info "Pulling latest code..."
 cd "$PROJECT_DIR"
-git pull --recurse-submodules
+git pull
 
-# Update submodules
-info "Updating submodules..."
-git submodule update --init --recursive
+# Update active production submodules only
+info "Updating active production submodules..."
+git submodule update --init MindAuth MindFourm
 
 # ─── MindAuth ─────────────────────────────────────────────
 info "MindAuth: installing dependencies..."

@@ -21,11 +21,14 @@
 
 ```bash
 # 克隆代码
-git clone <repo-url> mindproject
+git clone https://cnb.cool/mdtbbs/MindProject.git mindproject
 cd mindproject
 
-# 初始化子模块
-git submodule update --init --recursive
+# 初始化当前生产主链路子模块
+git submodule update --init MindAuth MindFourm
+
+# 当前生产部署链路只需要初始化 `MindAuth` 和 `MindFourm`。
+# `EasyManager` 仍为暂停模块，不属于默认生产拉取流程；`download-site` 继续独立部署。
 
 # 安装依赖
 npm install
@@ -525,7 +528,7 @@ pm2 stop all
 # 2. 回滚代码
 cd /path/to/mindproject
 git checkout <previous-tag-or-commit>
-git submodule update --init --recursive
+git submodule update --init MindAuth MindFourm
 
 # 3. 重新构建
 npm run build:shared
