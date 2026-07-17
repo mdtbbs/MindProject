@@ -1,6 +1,6 @@
 [submodule "EasyManager"]
 	path = EasyManager
-	url = https://github.com/mdtbbs/EasyManager.git
+	url = https://cnb.cool/mdtbbs/EasyManager.git
 	branch = master
 
 [submodule "MindAuth"]
